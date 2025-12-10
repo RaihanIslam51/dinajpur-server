@@ -93,14 +93,14 @@ export const createSubcategoryEntry = async (req, res) => {
     try {
         const { categoryId, categoryName, subcategoryName, name, image, designation, qualification, address, phone, email, description, status } = req.body;
 
-        if (!categoryId || !subcategoryName || !name) {
-            return res.status(400).json({ success: false, message: 'CategoryId, subcategoryName, and name are required' });
+        if (!categoryId || !name) {
+            return res.status(400).json({ success: false, message: 'CategoryId and name are required' });
         }
 
         const entryData = {
             categoryId,
             categoryName: categoryName || '',
-            subcategoryName,
+            subcategoryName: subcategoryName || '',
             name,
             image: image || '',
             designation: designation || '',
