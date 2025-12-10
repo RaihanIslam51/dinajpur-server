@@ -4,6 +4,7 @@ import { connectDB } from './db/db.js';
 import { PORT } from './config/config.js';
 import postRoutes from './routes/usersRoutes.js';
 import bannerRoutes from './routes/bannerRoutes.js';
+import featuredRoutes from './routes/featuredRoutes.js';
 
 const app = express();
 
@@ -20,6 +21,7 @@ app.get('/', (req, res) => {
 
 app.use('/api/users', postRoutes);
 app.use('/api/banners', bannerRoutes);
+app.use('/api/featured', featuredRoutes);
 
 
 
