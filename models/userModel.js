@@ -4,13 +4,15 @@ import { getDB, ObjectId } from '../db/db.js';
 
 export const insertUsers = async (data) => {
     console.log('Inserting user to database:', data);
-    const result = await getDB().collection('Users').insertOne(data);
+    const db = await getDB();
+    const result = await db.collection('Users').insertOne(data);
     console.log('Database insert result:', result);
     return result;
 };
 
 export const getAllUsers = async () => {
-    return await getDB()
+    const db = await getDB();
+    return await db
         .collection('Users')
         .find({})
         .sort({ createdAt: -1 })
@@ -18,13 +20,15 @@ export const getAllUsers = async () => {
 };
 
 export const getUsersById = async (id) => {
-    return await getDB()
+    const db = await getDB();
+    return await db
         .collection('Users')
         .findOne({ _id: new ObjectId(id) });
 };
 
 export const updateUsers = async (id, data) => {
-    return await getDB()
+    const db = await getDB();
+    return await db
         .collection('Users')
         .updateOne(
             { _id: new ObjectId(id) },
@@ -33,24 +37,28 @@ export const updateUsers = async (id, data) => {
 };
 
 export const deleteUsers = async (id) => {
-    return await getDB()
+    const db = await getDB();
+    return await db
         .collection('Users')
         .deleteOne({ _id: new ObjectId(id) });
 };
 
 export const getUsersCount = async () => {
-    const users = await getDB().collection('Users').find({}).toArray();
+    const db = await getDB();
+    const users = await db.collection('Users').find({}).toArray();
     return users.length;
 };
 
 export const getUserByNameAndPhone = async (name, phone) => {
-    return await getDB()
+    const db = await getDB();
+    return await db
         .collection('Users')
         .findOne({ name, phone });
 };
 
 export const updateUserRole = async (id, role) => {
-    return await getDB()
+    const db = await getDB();
+    return await db
         .collection('Users')
         .updateOne(
             { _id: new ObjectId(id) },
@@ -59,7 +67,8 @@ export const updateUserRole = async (id, role) => {
 };
 
 export const updateUserStatus = async (id, status) => {
-    return await getDB()
+    const db = await getDB();
+    return await db
         .collection('Users')
         .updateOne(
             { _id: new ObjectId(id) },

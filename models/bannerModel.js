@@ -1,11 +1,13 @@
 import { getDB, ObjectId } from '../db/db.js';
 
 export const insertBanner = async (data) => {
-    return await getDB().collection('Banners').insertOne(data);
+    const db = await getDB();
+    return await db.collection('Banners').insertOne(data);
 };
 
 export const getAllBanners = async () => {
-    return await getDB()
+    const db = await getDB();
+    return await db
         .collection('Banners')
         .find({})
         .sort({ createdAt: -1 })
@@ -13,13 +15,15 @@ export const getAllBanners = async () => {
 };
 
 export const getBannerById = async (id) => {
-    return await getDB()
+    const db = await getDB();
+    return await db
         .collection('Banners')
         .findOne({ _id: new ObjectId(id) });
 };
 
 export const updateBanner = async (id, data) => {
-    return await getDB()
+    const db = await getDB();
+    return await db
         .collection('Banners')
         .updateOne(
             { _id: new ObjectId(id) },
@@ -28,7 +32,8 @@ export const updateBanner = async (id, data) => {
 };
 
 export const deleteBanner = async (id) => {
-    return await getDB()
+    const db = await getDB();
+    return await db
         .collection('Banners')
         .deleteOne({ _id: new ObjectId(id) });
 };

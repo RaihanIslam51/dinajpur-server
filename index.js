@@ -9,11 +9,31 @@ import categoryRoutes from './routes/categoryRoutes.js';
 
 const app = express();
 
-app.use(cors());
+// Configure CORS to allow all origins
+app.use(cors({
+    origin: '*',
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'Cache-Control'],
+    credentials: false
+}));
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-
+// Middleware to ensure database connection for each request
+app.use(async (req, res, next) => {
+    try {
+        await connectDB();
+        next();
+    } catch (error) {
+        console.error('Database connection error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Database connection failed',
+            error: error.message
+        });
+    }
+});
 
 
 app.get('/', (req, res) => {

@@ -2,6 +2,7 @@ import { MongoClient, ObjectId } from 'mongodb';
 import { mongoURI } from '../config/config.js';
 
 let db;
+let client;
 
 export const connectDB = async () => {
     if (db) {
@@ -9,7 +10,10 @@ export const connectDB = async () => {
     }
 
     try {
-        const client = new MongoClient(mongoURI);
+        client = new MongoClient(mongoURI, {
+            serverSelectionTimeoutMS: 5000,
+            socketTimeoutMS: 45000,
+        });
         await client.connect();
         db = client.db('saidpurcity');
         console.log('MongoDB connected successfully');
@@ -20,9 +24,10 @@ export const connectDB = async () => {
     }
 };
 
-export const getDB = () => {
+export const getDB = async () => {
     if (!db) {
-        throw new Error('Database not connected');
+        console.log('Database not connected, connecting now...');
+        // await connectDB();
     }
     return db;
 };

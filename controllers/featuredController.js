@@ -39,15 +39,22 @@ export const createFeatured = async (req, res) => {
 };
 
 // Get all featured items
-const getAllFeatured = async (req, res) => {
+export const getAllFeatured = async (req, res) => {
     try {
+        console.log('getAllFeatured called');
+        console.log('featuredModel:', featuredModel);
+        console.log('featuredModel.getAllFeatured:', featuredModel.getAllFeatured);
+        
         const featured = await featuredModel.getAllFeatured();
+        console.log('Featured items retrieved:', featured.length);
+        
         res.status(200).json({
             success: true,
             data: featured
         });
     } catch (error) {
         console.error('Error fetching featured items:', error);
+        console.error('Error stack:', error.stack);
         res.status(500).json({
             success: false,
             message: 'Failed to fetch featured items',
@@ -57,7 +64,7 @@ const getAllFeatured = async (req, res) => {
 };
 
 // Get featured item by ID
-const getFeaturedById = async (req, res) => {
+export const getFeaturedById = async (req, res) => {
     try {
         const { id } = req.params;
         const featured = await featuredModel.getFeaturedById(id);
@@ -84,7 +91,7 @@ const getFeaturedById = async (req, res) => {
 };
 
 // Update featured item
-const updateFeatured = async (req, res) => {
+export const updateFeatured = async (req, res) => {
     try {
         const { id } = req.params;
         const updateData = req.body;
@@ -113,7 +120,7 @@ const updateFeatured = async (req, res) => {
 };
 
 // Delete featured item
-const deleteFeatured = async (req, res) => {
+export const deleteFeatured = async (req, res) => {
     try {
         const { id } = req.params;
         const result = await featuredModel.deleteFeatured(id);

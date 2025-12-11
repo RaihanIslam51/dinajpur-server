@@ -3,7 +3,7 @@ import categoryModel from '../models/categoryModel.js';
 // Create a new category
 export const createCategory = async (req, res) => {
     try {
-        const { name, icon, subcategories, status } = req.body;
+        const { name, icon, subcategories, displayIn, status } = req.body;
 
         if (!name) {
             return res.status(400).json({ success: false, message: 'Category name is required' });
@@ -13,6 +13,7 @@ export const createCategory = async (req, res) => {
             name,
             icon: icon || '',
             subcategories: subcategories || [],
+            displayIn: displayIn || 'allcategory',
             status: status || 'active'
         };
 
@@ -27,6 +28,14 @@ export const createCategory = async (req, res) => {
 // Get all categories
 export const getAllCategories = async (req, res) => {
     try {
+        // Set cache control headers to prevent caching
+        res.set({
+            'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
+            'Pragma': 'no-cache',
+            'Expires': '0',
+            'Surrogate-Control': 'no-store'
+        });
+        
         const categories = await categoryModel.getAllCategories();
         res.status(200).json({ success: true, data: categories });
     } catch (error) {
@@ -123,6 +132,14 @@ export const createSubcategoryEntry = async (req, res) => {
 // Get all subcategory entries
 export const getAllSubcategoryEntries = async (req, res) => {
     try {
+        // Set cache control headers to prevent caching
+        res.set({
+            'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
+            'Pragma': 'no-cache',
+            'Expires': '0',
+            'Surrogate-Control': 'no-store'
+        });
+        
         const { categoryId, subcategoryName, status } = req.query;
         const filters = {};
         if (categoryId) filters.categoryId = categoryId;

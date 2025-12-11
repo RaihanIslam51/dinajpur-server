@@ -1,6 +1,6 @@
 import express from 'express';
 const router = express.Router();
-import featuredController from '../controllers/featuredController.js';
+import * as featuredController from '../controllers/featuredController.js';
 
 // Create new featured item
 router.post('/', featuredController.createFeatured);
