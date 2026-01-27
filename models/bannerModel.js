@@ -1,5 +1,20 @@
 import { getDB, ObjectId } from '../db/db.js';
 
+// Create indexes for better performance
+const createIndexes = async () => {
+    try {
+        const db = await getDB();
+        await db.collection('Banners').createIndex({ status: 1 });
+        await db.collection('Banners').createIndex({ createdAt: -1 });
+        console.log('Banner indexes created successfully');
+    } catch (error) {
+        console.log('Banner index creation skipped:', error.message);
+    }
+};
+
+// Initialize indexes after database connection
+// setTimeout(createIndexes, 2000); // Disabled for serverless compatibility
+
 export const insertBanner = async (data) => {
     const db = await getDB();
     return await db.collection('Banners').insertOne(data);

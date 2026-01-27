@@ -1,5 +1,23 @@
 import { getDB, ObjectId } from '../db/db.js';
 
+// Create indexes for better performance
+const createIndexes = async () => {
+    try {
+        const db = await getDB();
+        await db.collection('Categories').createIndex({ status: 1, displayIn: 1 });
+        await db.collection('Categories').createIndex({ name: 1 });
+        await db.collection('Categories').createIndex({ createdAt: -1 });
+        await db.collection('SubcategoryEntries').createIndex({ categoryId: 1, status: 1 });
+        await db.collection('SubcategoryEntries').createIndex({ createdAt: -1 });
+        console.log('Database indexes created successfully');
+    } catch (error) {
+        console.log('Index creation skipped (may already exist):', error.message);
+    }
+};
+
+// Initialize indexes after database connection
+// setTimeout(createIndexes, 2000); // Disabled for serverless compatibility
+
 // Insert a new category
 export const insertCategory = async (categoryData) => {
     const db = await getDB();
@@ -99,5 +117,6 @@ export default {
     getAllSubcategoryEntries,
     getSubcategoryEntryById,
     updateSubcategoryEntry,
-    deleteSubcategoryEntry
+    deleteSubcategoryEntry,
+    getSubcategoryEntryById,
 };

@@ -27,7 +27,7 @@ export const connectDB = async () => {
 export const getDB = async () => {
     if (!db) {
         console.log('Database not connected, connecting now...');
-        // await connectDB();
+        await connectDB();
     }
     return db;
 };
