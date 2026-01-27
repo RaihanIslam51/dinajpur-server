@@ -29,9 +29,17 @@ export const insertFeatured = async (featuredData) => {
 
 // Get all featured items
 export const getAllFeatured = async () => {
-    const db = await getDB();
-    const featured = await db.collection('Featured').find({}).sort({ createdAt: -1 }).toArray();
-    return featured;
+    try {
+        const db = await getDB();
+        if (!db) {
+            throw new Error('Database connection is not available');
+        }
+        const featured = await db.collection('Featured').find({}).sort({ createdAt: -1 }).toArray();
+        return featured;
+    } catch (error) {
+        console.error('Error in getAllFeatured:', error);
+        throw error;
+    }
 };
 
 // Get featured item by ID
