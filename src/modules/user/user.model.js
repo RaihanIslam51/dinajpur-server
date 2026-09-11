@@ -1,0 +1,17 @@
+/**
+ * User Model Schema
+ */
+export const userSchema = {
+    collectionName: 'users',
+    fields: {
+        id: 'ObjectId',
+        title: 'String',
+        name: 'String',
+        category: 'String',
+        description: 'String',
+        contactPhone: 'String',
+        address: 'String',
+        createdAt: 'Date',
+        updatedAt: 'Date'
+    }
+};

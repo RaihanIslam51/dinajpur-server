@@ -1,75 +1,25 @@
-import express from 'express';
-import cors from 'cors';
-import { connectDB } from './db/db.js';
-import { PORT } from './config/config.js';
-import postRoutes from './routes/usersRoutes.js';
-import bannerRoutes from './routes/bannerRoutes.js';
-import featuredRoutes from './routes/featuredRoutes.js';
-import categoryRoutes from './routes/categoryRoutes.js';
+import app from './src/app.js';
+import { connectDB } from './src/database/db.js';
+import { config } from './src/config/db.config.js';
+import { logger } from './src/utils/logger.js';
 
-const app = express();
-
-// Configure CORS to allow all origins
-app.use(cors({
-    origin: '*',
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'Cache-Control'],
-    credentials: false
-}));
-
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
-// Middleware to ensure database connection for each request
-app.use(async (req, res, next) => {
-    try {
-        await connectDB();
-        next();
-    } catch (error) {
-        console.error('Database connection error:', error);
-        res.status(500).json({
-            success: false,
-            message: 'Database connection failed',
-            error: error.message
-        });
-    }
-});
-
-
-app.get('/', (req, res) => {
-    res.send('Server is running');
-});
-
-app.use('/api/users', postRoutes);
-app.use('/api/banners', bannerRoutes);
-app.use('/api/featured', featuredRoutes);
-app.use('/api/categories', categoryRoutes);
-
-
-
-
-
-
-
-
-
-
-
-
-
+const PORT = config.port;
 
 const startServer = async () => {
     try {
         await connectDB();
         app.listen(PORT, () => {
-            console.log(`Server running on port ${PORT}`);
+            logger.info(`Server running on port ${PORT} in ${config.nodeEnv} mode`);
+            logger.info(`Smart City 26 Category API endpoints active at http://localhost:${PORT}/api`);
         });
     } catch (error) {
-        console.error('MongoDB connection error:', error.message);
+        logger.error('Failed to start server:', error);
         process.exit(1);
     }
 };
 
-startServer();
+if (process.env.VERCEL !== '1' && !process.env.VERCEL_ENV) {
+    startServer();
+}
 
 export default app;

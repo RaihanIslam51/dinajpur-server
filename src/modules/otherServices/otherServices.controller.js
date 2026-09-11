@@ -1,0 +1,94 @@
+import otherServicesService from './otherServices.service.js';
+
+export const getAllOtherServices = async (req, res) => {
+    try {
+        const otherServices = await otherServicesService.getAll(req.query);
+        res.status(200).json({
+            success: true,
+            count: otherServices.length,
+            data: otherServices
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'অন্যান্য সার্ভিস টেকনিশিয়ান তালিকা আনতে সমস্যা হয়েছে',
+            error: error.message
+        });
+    }
+};
+
+export const getOtherServiceById = async (req, res) => {
+    try {
+        const otherService = await otherServicesService.getById(req.params.id);
+        if (!otherService) {
+            return res.status(404).json({
+                success: false,
+                message: 'সার্ভিস প্রোভাইডার পাওয়া যায়নি'
+            });
+        }
+        res.status(200).json({
+            success: true,
+            data: otherService
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'সার্ভিস প্রোভাইডার তথ্য আনতে সমস্যা হয়েছে',
+            error: error.message
+        });
+    }
+};
+
+export const createOtherService = async (req, res) => {
+    try {
+        const newOtherService = await otherServicesService.create(req.body);
+        res.status(201).json({
+            success: true,
+            message: 'আপনার তথ্য পর্যালোচনার জন্য জমা হয়েছে, অনুমোদনের পর এটি তালিকায় দেখা যাবে।',
+            data: newOtherService
+        });
+    } catch (error) {
+        res.status(400).json({
+            success: false,
+            message: error.message || 'নতুন তথ্য সংরক্ষণ করতে ব্যর্থ হয়েছে'
+        });
+    }
+};
+
+export const updateOtherServiceStatus = async (req, res) => {
+    try {
+        const { status } = req.body;
+        const updated = await otherServicesService.updateStatus(req.params.id, status);
+        if (!updated) {
+            return res.status(404).json({
+                success: false,
+                message: 'সার্ভিস প্রোভাইডার তথ্য পাওয়া যায়নি'
+            });
+        }
+        res.status(200).json({
+            success: true,
+            message: 'স্ট্যাটাস সফলভাবে আপডেট করা হয়েছে',
+            data: updated
+        });
+    } catch (error) {
+        res.status(400).json({
+            success: false,
+            message: 'স্ট্যাটাস আপডেট ব্যর্থ হয়েছে'
+        });
+    }
+};
+
+export const deleteOtherService = async (req, res) => {
+    try {
+        await otherServicesService.delete(req.params.id);
+        res.status(200).json({
+            success: true,
+            message: 'সার্ভিস প্রোভাইডারের তথ্য সফলভাবে মোছা হয়েছে'
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'ডিলিট করতে ব্যর্থ হয়েছে'
+        });
+    }
+};

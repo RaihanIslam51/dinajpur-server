@@ -1,5 +1,5 @@
 import app from '../index.js';
-import { connectDB } from '../db/db.js';
+import { connectDB } from '../src/database/db.js';
 
 // Establish database connection
 let isConnected = false;
